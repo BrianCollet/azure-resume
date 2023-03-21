@@ -1,13 +1,12 @@
 const { CosmosClient } = require('@azure/cosmos');
-const settings = require('../local.settings.json');
 
 module.exports = async function (context) {
-	const endpoint = settings.Values.cosmosEndpoint;
-	const key = settings.Values.cosmosKey;
+	const endpoint = process.env['cosmosEndpoint'];
+	const key = process.env['cosmosKey'];
 	const client = new CosmosClient({ endpoint, key });
 
-	const database = await client.database(settings.Values.cosmosDatabase);
-	const container = database.container(settings.Values.cosmosContainer);
+	const database = await client.database(process.env['cosmosDatabase']);
+	const container = database.container(process.env['cosmosContainer']);
 	const { resources } = await container.items.readAll().fetchAll();
 
 	const count = resources[0].count;
